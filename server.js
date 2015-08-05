@@ -11,11 +11,17 @@ function send404(response) {
 function onRequest(request, response) {
   if (request.method == 'GET' && request.url == '/') {
     response.writeHead(200, {"Content-Type": "text/html"});
-    fs.createReadStream("./index.html").pipe(response);
+    fs.readFile("./index.html", function (err, data) {
+    if (err) {
+      console.log(err);
+    }
+      response.write(data);
+      response.end();
+    });
   } else {
     send404(response);
   }
 };
 
 http.createServer(onRequest).listen(3000);
-console.log("server is now running")
+console.log("server is now running");
